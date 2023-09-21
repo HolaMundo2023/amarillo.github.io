@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flor Amarilla Dinámica</title>
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      #flowerCanvas {
+        display: block;
+        margin: auto;
+        background-color: black;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      #quoteContainer {
+        position: absolute;
+        top: 53%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 24px;
+        color: white;
+        animation: animateText 3s infinite alternate;
+        font-size: 30px;
+      }
+
+      #greeting {
+        position: absolute;
+        top: 73%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 40px;
+        font-family: "Pacifico", cursive;
+        color: rgb(241, 162, 162);
+      }
+
+      @keyframes animateText {
+        0% {
+          transform: translateX(-50%) scale(1.3);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(-50%) scale(1.4);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <canvas id="flowerCanvas"></canvas>
+    </div>
+    <div id="quoteContainer">
+      La amistad no necesita palabras, es la soledad sin angustia, es el
+      compañerismo sin necesidad de explicaciones, es la certeza de que alguien
+      está allí para ti siempre 🎉
+    </div>
+    <div id="greeting">Feliz día de la amistad Karencita 💙</div>
+
+    <script>
+      var canvas = document.getElementById("flowerCanvas");
+      var ctx = canvas.getContext("2d");
+
+      var xOffset = 0;
+      var yOffset = amplitude * Math.sin(frequency * Date.now() * 0.2);
+      var amplitude = 10;
+      var frequency = 0.004;
+
+      function drawFlower(x, y) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y - 200);
+        ctx.strokeStyle = "#4A250D";
+        ctx.lineWidth = 10;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(x, y - 90);
+        ctx.quadraticCurveTo(x + 20, y - 90, x + 40, y - 100);
+        ctx.lineTo(x + 60, y - 50);
+        ctx.quadraticCurveTo(x + 50, y - 60, x + 40, y - 50);
+        ctx.lineTo(x + 30, y - 100);
+        ctx.closePath();
+        ctx.fillStyle = "green";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(x, y - 100);
+        ctx.quadraticCurveTo(x - 20, y - 120, x - 40, y - 100);
+        ctx.lineTo(x - 60, y - 50);
+        ctx.quadraticCurveTo(x - 50, y - 60, x - 40, y - 50);
+        ctx.lineTo(x - 30, y - 100);
+        ctx.closePath();
+        ctx.fillStyle = "green";
+        ctx.fill();
+
+        for (var i = 0; i < 12; i++) {
+          var angle = (i / 12) * Math.PI * 2;
+          var petalX = x + Math.cos(angle) * 60;
+          var petalY = y - 210 + Math.sin(angle) * 60;
+
+          ctx.beginPath();
+          ctx.arc(petalX, petalY, 50, 0, Math.PI * 2);
+          ctx.fillStyle = "yellow";
+          ctx.fill();
+        }
+
+        ctx.beginPath();
+        ctx.arc(x, y - 210, 30, 0, Math.PI * 2);
+        ctx.fillStyle = "orange";
+        ctx.fill();
+      }
+
+      function animateFlower() {
+        var x1 = canvas.width / 4 + xOffset;
+        var x2 = canvas.width / 2 + xOffset;
+        var x3 = (canvas.width * 3) / 4 + xOffset;
+        var y = canvas.height / 2 - yOffset;
+
+        drawFlower(x1, y);
+
+        drawFlower(x2, y);
+
+        drawFlower(x3, y);
+
+        xOffset = amplitude * Math.sin(frequency * Date.now());
+        yOffset = amplitude * Math.sin(frequency * Date.now() * 0.5);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        drawFlower(x1, y);
+        drawFlower(x2, y);
+        drawFlower(x3, y);
+
+        requestAnimationFrame(animateFlower);
+      }
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      window.onload = function () {
+        resizeCanvas();
+        animateFlower();
+      };
+
+      window.addEventListener("resize", resizeCanvas);
+    </script>
+  </body>
+</html>
